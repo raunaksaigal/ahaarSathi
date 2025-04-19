@@ -9,28 +9,21 @@ from .prediction import predict_image_content
 import os
 
 class ImageUploadView(generics.CreateAPIView):
-    """API endpoint for uploading and processing images"""
     serializer_class = ImageUploadSerializer
     parser_classes = (MultiPartParser, FormParser)
-    
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
-        # Save the image upload
         instance = serializer.save()
-        
-        # Get the path to the saved image
+
         image_path = instance.image.path
-        
-        # Use the prediction service to analyze the image
+
         prediction_result = predict_image_content(image_path)
-        
-        # Update the instance with the prediction
+
         instance.prediction = prediction_result['class']
         instance.save()
-        
-        # Return the updated instance data
+
         response_serializer = self.get_serializer(instance)
         response_data = response_serializer.data
         response_data.update({
