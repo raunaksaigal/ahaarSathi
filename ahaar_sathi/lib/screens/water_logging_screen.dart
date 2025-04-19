@@ -34,8 +34,10 @@ class _WaterLoggingScreenState extends State<WaterLoggingScreen> with SingleTick
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
-    );
-    _animationController.forward();
+    )..addListener(() {
+      setState(() {});
+    });
+    _animationController.repeat(reverse: true);
   }
 
   @override

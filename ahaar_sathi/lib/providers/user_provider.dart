@@ -45,6 +45,34 @@ class UserProvider with ChangeNotifier {
     }
   }
   
+  // Initialize user data as guest
+  Future<void> initGuestUser() async {
+    _setLoading(true);
+    
+    try {
+      // Create guest user
+      _user = User(
+        id: 'guest_${DateTime.now().millisecondsSinceEpoch}',
+        name: 'Guest User',
+        age: 30,
+        height: 170.0,
+        weight: 65.0,
+        gender: 'Other',
+        dailyCalorieTarget: 2000,
+        dailyWaterTarget: 2500,
+      );
+      
+      // Save guest status to preferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_id', _user!.id);
+      await prefs.setBool('is_guest', true);
+      
+      _setLoading(false);
+    } catch (e) {
+      _setError(e.toString());
+    }
+  }
+  
   // Fetch user profile from API (commented out, using fake data)
   Future<void> fetchUserProfile(String userId) async {
     _setLoading(true);
@@ -131,5 +159,29 @@ class UserProvider with ChangeNotifier {
   void clearError() {
     _error = null;
     notifyListeners();
+  }
+  
+  // Logout user
+  Future<void> logout() async {
+    _setLoading(true);
+    
+    try {
+      // Call the API service logout method if we had real authentication
+      if (_user != null) {
+        await _apiService.logout(_user!.id);
+      }
+      
+      // Clear stored user data
+      _user = null;
+      
+      // Remove user ID from shared preferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('user_id');
+      
+      _setLoading(false);
+    } catch (e) {
+      _setError(e.toString());
+      rethrow;
+    }
   }
 } 

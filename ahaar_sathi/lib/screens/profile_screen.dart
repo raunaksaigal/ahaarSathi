@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/theme_provider.dart';
+import '../providers/nutrition_provider.dart';
 import '../models/user.dart';
+import '../widgets/calorie_donut_chart.dart';
+import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -214,6 +217,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     
+                    // Logout button
+                    if (!_isEditing)
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: OutlinedButton.icon(
+                            onPressed: () async {
+                              try {
+                                final userProvider = Provider.of<UserProvider>(context, listen: false);
+                                await userProvider.logout();
+                                
+                                if (!mounted) return;
+                                // Navigate to login screen using MaterialPageRoute
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                  (route) => false,
+                                );
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error logging out: ${e.toString()}')),
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              Icons.logout,
+                              color: Colors.red,
+                            ),
+                            label: Text(
+                              'Logout',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: Colors.red.withOpacity(0.5)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    
                     if (_isEditing) ...[
                       // Age field
                       const Text(
@@ -364,6 +409,120 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _buildProfileItem('Height', '${user.height} cm'),
                       _buildProfileItem('Weight', '${user.weight} kg'),
                       _buildProfileItem('Gender', user.gender),
+                      
+                      const SizedBox(height: 32),
+                      
+                      // Calorie summary with donut chart
+                      Consumer<ThemeProvider>(
+                        builder: (context, themeProvider, child) {
+                          final isDarkMode = themeProvider.isDarkMode;
+                          final textColor = isDarkMode ? Colors.white : Colors.black;
+                          final cardColor = isDarkMode ? Colors.grey[900] : Colors.white;
+                          final cardBorderColor = isDarkMode ? Colors.grey[800] : Colors.grey[300];
+                          
+                          return Card(
+                            color: cardColor,
+                            elevation: isDarkMode ? 0 : 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(
+                                color: cardBorderColor!,
+                                width: isDarkMode ? 1 : 0,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Daily Calories',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.info_outline,
+                                          color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          // Show info about calories
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  
+                                  const SizedBox(height: 16),
+                                  
+                                  // Donut chart
+                                  Center(
+                                    child: CalorieDonutChart(
+                                      consumed: Provider.of<NutritionProvider>(context).totalCaloriesToday.toDouble(),
+                                      total: user.dailyCalorieTarget.toDouble(),
+                                      size: 160,
+                                      thickness: 15,
+                                      showText: true,
+                                      showIcon: true,
+                                    ),
+                                  ),
+                                  
+                                  const SizedBox(height: 20),
+                                  
+                                  // Macronutrients
+                                  Text(
+                                    'Macronutrients',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                  
+                                  const SizedBox(height: 12),
+                                  
+                                  // Macros display
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      _buildMacroItem(
+                                        context,
+                                        'Carbs',
+                                        '${(Provider.of<NutritionProvider>(context).totalCaloriesToday * 0.5 / 4).toInt()}g',
+                                        'Goal: ${(user.dailyCalorieTarget * 0.5 / 4).toInt()}g',
+                                        Colors.amber,
+                                        isDarkMode,
+                                      ),
+                                      _buildMacroItem(
+                                        context,
+                                        'Protein',
+                                        '${(Provider.of<NutritionProvider>(context).totalCaloriesToday * 0.3 / 4).toInt()}g',
+                                        'Goal: ${(user.dailyCalorieTarget * 0.3 / 4).toInt()}g',
+                                        Colors.red,
+                                        isDarkMode,
+                                      ),
+                                      _buildMacroItem(
+                                        context,
+                                        'Fat',
+                                        '${(Provider.of<NutritionProvider>(context).totalCaloriesToday * 0.2 / 9).toInt()}g',
+                                        'Goal: ${(user.dailyCalorieTarget * 0.2 / 9).toInt()}g',
+                                        Colors.blue,
+                                        isDarkMode,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                      ),
                     ],
                   ],
                 ),
@@ -389,6 +548,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
             value,
             style: const TextStyle(
               fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Helper method to build macro item
+  Widget _buildMacroItem(
+    BuildContext context, 
+    String title, 
+    String value, 
+    String target, 
+    Color color, 
+    bool isDarkMode
+  ) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.25,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      decoration: BoxDecoration(
+        color: isDarkMode ? Colors.black12 : Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200,
+        ),
+      ),
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: isDarkMode ? Colors.white70 : Colors.black54,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: isDarkMode ? Colors.white : Colors.black,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            target,
+            style: TextStyle(
+              fontSize: 12,
+              color: isDarkMode ? Colors.grey.shade500 : Colors.grey.shade600,
             ),
           ),
         ],

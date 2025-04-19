@@ -37,7 +37,7 @@ class _WaterLoggingScreenDarkState extends State<WaterLoggingScreenDark> with Si
     )..addListener(() {
       setState(() {});
     });
-    _animationController.repeat(reverse: false);
+    _animationController.repeat(reverse: true);
   }
 
   @override

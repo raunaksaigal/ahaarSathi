@@ -10,6 +10,7 @@ import '../models/food_entry.dart';
 import 'food_logging_screen.dart';
 import 'water_logging_screen.dart';
 import 'water_logging_screen_dark.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -161,12 +162,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                            CircleAvatar(
-                              radius: 24,
-                              backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
-                              child: Icon(
-                                Icons.person_rounded,
-                                color: theme.colorScheme.primary,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const ProfileScreen(),
+                                  ),
+                                );
+                              },
+                              child: CircleAvatar(
+                                radius: 24,
+                                backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
+                                child: Icon(
+                                  Icons.person_rounded,
+                                  color: theme.colorScheme.primary,
+                                ),
                               ),
                             ),
                           ],
