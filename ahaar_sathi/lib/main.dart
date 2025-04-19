@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:async';
 import 'providers/user_provider.dart';
 import 'providers/nutrition_provider.dart';
 import 'providers/theme_provider.dart';
@@ -170,13 +171,290 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            home: const MainScreen(),
+            home: const SplashScreen(),
             debugShowCheckedModeBanner: false,
           );
         }
       ),
     );
   }
+}
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _horizontalAnimation;
+  late Animation<double> _strokeAnimation1;
+  late Animation<double> _strokeAnimation2;
+  late Animation<double> _strokeAnimation3;
+  late Animation<double> _glowAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3500),
+    );
+    
+    // Make the Namaste text fully appear first (0.0-0.2 interval)
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.0, 0.2, curve: Curves.easeIn),
+      ),
+    );
+    
+    // Slide in animation completes faster to ensure text is fully visible
+    _horizontalAnimation = Tween<double>(begin: -50.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.0, 0.2, curve: Curves.easeOutCubic),
+      ),
+    );
+    
+    // Animations for strokes start after Namaste is fully visible
+    _strokeAnimation1 = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.25, 0.4, curve: Curves.easeInOut),
+      ),
+    );
+    
+    _strokeAnimation2 = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.4, 0.55, curve: Curves.easeInOut),
+      ),
+    );
+    
+    _strokeAnimation3 = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.55, 0.7, curve: Curves.easeInOut),
+      ),
+    );
+    
+    // Glow animation happens last and cycles
+    _glowAnimation = Tween<double>(begin: 0.0, end: 2.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.3, 1.0, curve: Curves.easeInOut),
+      ),
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        _controller.forward();
+      }
+    });
+    
+    _controller.forward();
+    
+    // Navigate to MainScreen after splash delay
+    Timer(const Duration(seconds: 5), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const MainScreen()),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return Stack(
+              children: [
+                // Silver Namaste text with animated glow
+                Positioned.fill(
+                  child: Transform.translate(
+                    offset: Offset(_horizontalAnimation.value, 0),
+                    child: Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Base silver text (not affected by fade)
+                          Center(
+                            child: Text(
+                              "नमस्ते",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 56,
+                                fontWeight: FontWeight.w300,
+                                letterSpacing: 2.0,
+                                height: 1.2,
+                                color: Colors.grey.shade600.withOpacity(_fadeAnimation.value),
+                              ),
+                            ),
+                          ),
+                          
+                          // Circular fade in/out effect on white text
+                          ShaderMask(
+                            shaderCallback: (rect) {
+                              return RadialGradient(
+                                center: Alignment.center,
+                                radius: _glowAnimation.value * 0.5,
+                                colors: [
+                                  Colors.white,
+                                  Colors.white,
+                                  Colors.white.withOpacity(0.6),
+                                  Colors.white.withOpacity(0.3),
+                                  Colors.transparent,
+                                ],
+                                stops: const [0.0, 0.3, 0.6, 0.8, 1.0],
+                              ).createShader(rect);
+                            },
+                            blendMode: BlendMode.srcIn,
+                            child: Text(
+                              "नमस्ते",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 56,
+                                fontWeight: FontWeight.w300,
+                                letterSpacing: 2.0,
+                                height: 1.2,
+                                color: Colors.white,
+                                shadows: [
+                                  BoxShadow(
+                                    color: Colors.white.withOpacity(0.5 * _glowAnimation.value),
+                                    blurRadius: 15.0,
+                                    spreadRadius: 3.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                
+                // Animated horizontal lines
+                Positioned(
+                  top: MediaQuery.of(context).size.height / 2 - 60,
+                  left: 0,
+                  right: 0,
+                  child: CustomPaint(
+                    painter: LinePainter(
+                      progress: _strokeAnimation1.value,
+                      color: Colors.white.withOpacity(0.4),
+                      startX: MediaQuery.of(context).size.width * 0.2,
+                      endX: MediaQuery.of(context).size.width * 0.8,
+                    ),
+                  ),
+                ),
+                
+                Positioned(
+                  top: MediaQuery.of(context).size.height / 2 + 100,
+                  left: 0,
+                  right: 0,
+                  child: CustomPaint(
+                    painter: LinePainter(
+                      progress: _strokeAnimation2.value,
+                      color: Colors.white.withOpacity(0.4),
+                      startX: MediaQuery.of(context).size.width * 0.2,
+                      endX: MediaQuery.of(context).size.width * 0.8,
+                      reverse: true,
+                    ),
+                  ),
+                ),
+                
+                // App name appears last with subtle fade-in
+                Positioned(
+                  bottom: MediaQuery.of(context).size.height * 0.15,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Opacity(
+                      opacity: _strokeAnimation3.value,
+                      child: Column(
+                        children: [
+                          Text(
+                            "AHAAR SATHI",
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 8.0,
+                              color: const Color(0xFFCCCCCC),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            "Your Nutrition Companion",
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w300,
+                              letterSpacing: 1.0,
+                              color: const Color(0xFF888888),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// Custom painter for animated horizontal lines
+class LinePainter extends CustomPainter {
+  final double progress;
+  final Color color;
+  final double startX;
+  final double endX;
+  final bool reverse;
+  
+  LinePainter({
+    required this.progress,
+    required this.color,
+    required this.startX,
+    required this.endX,
+    this.reverse = false,
+  });
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.0
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+    
+    final start = reverse ? Offset(endX - (endX - startX) * progress, 0) : Offset(startX, 0);
+    final end = reverse ? Offset(endX, 0) : Offset(startX + (endX - startX) * progress, 0);
+    
+    canvas.drawLine(start, end, paint);
+  }
+  
+  @override
+  bool shouldRepaint(LinePainter oldDelegate) => 
+    oldDelegate.progress != progress || 
+    oldDelegate.color != color;
 }
 
 class MainScreen extends StatefulWidget {
