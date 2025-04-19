@@ -1,5 +1,3 @@
-# image_api/prediction.py
-
 import os
 import argparse
 import json
@@ -8,6 +6,10 @@ from pathlib import Path
 from PIL import Image
 from ultralytics import YOLO
 import cv2
+MODEL_PATH = Path(__file__).resolve().parent / "best.pt"
+CSV_PATH = Path(__file__).resolve().parent / "nutrient_values.csv"
+import pandas as pd
+
 
 # Dictionary mapping food names to nutritional information (calories per 100g)
 # This is a simplified example - in a real app, use a more comprehensive database
@@ -139,51 +141,39 @@ def process_image_file(model, image_path, output_dir=None, save_json=False):
     
     return top_pred
 
+df = pd.read_csv(CSV_PATH)
 
-    
+def get_nutrition_by_dish(dish_name):
+    # Read the CSV
 
+    # Find the row matching the dish name
+    row = df[df['dish_name'] == dish_name]
+
+    if row.empty:
+        return {"error": f"Dish '{dish_name}' not found."}
+
+    # Convert the row to a dictionary
+    result = row.iloc[0].to_dict()
+    return result
 
 def predict_image_content(image_path):
-  
-
+    
     
     # Load model
-    model = load_model(r"image_api\best.pt")
-    # Process image
-    prediction = process_image_file(
-        model=model, 
-        image_path=image_path
-    )
-   
-    return {
-        "class": prediction["class_name"],
-        "confidence": prediction["confidence"],}
-
-def predict_image_content(image_path):
-    """
-    A mock function that simulates image prediction.
-    In a real application, this would use a ML model like TensorFlow or PyTorch.
+    model = load_model(MODEL_PATH)
     
-    Args:
-        image_path: Path to the uploaded image
-        
-    Returns:
-        dict: Prediction result with class name and confidence
-    """
-    # Mock prediction - in a real app, replace with actual ML model prediction
-    import random
+    # Process image
+    top_prediction = process_image_file(
+        model=model, 
+        image_path=image_path, 
+    )
     
     # Example prediction categories
-    categories = [
-        "cat", "dog", "car", "bicycle", "bird", 
-        "flower", "tree", "building", "person", "landscape"
-    ]
     
     # Simulate prediction by randomly selecting a category
-    predicted_class = random.choice(categories)
-    confidence = round(random.uniform(0.7, 0.99), 2)
     
     return {
-        "class": predicted_class,
-        "confidence": confidence
+        "class": top_prediction["class_name"],
+    "confidence": top_prediction["confidence"],
+    "nutrition": get_nutrition_by_dish(str(top_prediction["class_name"]))
     }

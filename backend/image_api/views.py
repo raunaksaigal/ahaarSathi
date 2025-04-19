@@ -4,6 +4,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import ImageUpload, PredictionFeedback
 from .serializers import ImageUploadSerializer, PredictionFeedbackSerializer
 from .prediction import predict_image_content
+from .searchNutrients import get_row_as_json
 
 class ImageUploadView(generics.CreateAPIView):
     """API endpoint for uploading and processing images"""
