@@ -16,18 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-<<<<<<< HEAD
+
 from django.conf.urls.static import static
 from django.conf import settings
-=======
->>>>>>> c3b0ca754a528a9e820d4f649f61ab5e23a47895
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('image/', include("image_api.urls")),
     path('data/', include("data_api.urls")),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
+    
+    # JWT Token URLs
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+    # API URLs
+    path('users/', include('users.urls')),
 ]
-<<<<<<< HEAD
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-=======
->>>>>>> c3b0ca754a528a9e820d4f649f61ab5e23a47895

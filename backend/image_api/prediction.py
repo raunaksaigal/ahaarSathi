@@ -1,5 +1,5 @@
 # image_api/prediction.py
-<<<<<<< HEAD
+
 import os
 import argparse
 import json
@@ -157,8 +157,7 @@ def predict_image_content(image_path):
    
     return {
         "class": prediction["class_name"],
-        "confidence": prediction["confidence"],
-=======
+        "confidence": prediction["confidence"],}
 
 def predict_image_content(image_path):
     """
@@ -187,5 +186,4 @@ def predict_image_content(image_path):
     return {
         "class": predicted_class,
         "confidence": confidence
->>>>>>> c3b0ca754a528a9e820d4f649f61ab5e23a47895
     }
