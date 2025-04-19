@@ -195,33 +195,88 @@ class NutritionProvider with ChangeNotifier {
     }
   }
   
-  // Recognize food from image
-  Future<Map<String, dynamic>> recognizeFood(String userId, File imageFile) async {
+  // Image prediction and food recognition
+  Future<Map<String, dynamic>> recognizeFood(File imageFile) async {
     _setLoading(true);
-    
-    // Simulate API delay
-    await Future.delayed(const Duration(seconds: 1));
-    
     try {
-      // Uncomment this when API is ready
-      // final result = await _apiService.recognizeFood(userId, imageFile);
+      final result = await _apiService.predictImage(imageFile);
       
-      // Return dummy recognition data for now
-      final result = {
-        'name': 'Samosa',
-        'calories': 250,
-        'nutrition_info': {
-          'carbs': 30,
-          'protein': 5,
-          'fat': 15,
-        }
-      };
-      
-      _setLoading(false);
-      return result;
+      if (result['success']) {
+        // Create a food entry from the prediction
+        final prediction = result['prediction'];
+        final foodEntry = FoodEntry(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          name: prediction['class'] ?? 'Unknown Food',
+          calories: prediction['calories'] ?? 0,
+          timestamp: DateTime.now(),
+          mealType: _getCurrentMealType(),
+          imageUrl: '', // Temporary empty string, will be updated with actual URL when available
+          nutritionInfo: {
+            'carbs': prediction['carbs'] ?? 0,
+            'protein': prediction['protein'] ?? 0,
+            'fat': prediction['fat'] ?? 0,
+          },
+        );
+        
+        // Add to entries
+        _foodEntries.add(foodEntry);
+        notifyListeners();
+        
+        return {
+          'success': true,
+          'foodEntry': foodEntry,
+          'prediction': prediction,
+          'imageId': result['image_id'],
+        };
+      } else {
+        throw Exception('Failed to recognize food');
+      }
     } catch (e) {
       _setError(e.toString());
-      return {};
+      return {
+        'success': false,
+        'error': e.toString(),
+      };
+    } finally {
+      _setLoading(false);
+    }
+  }
+  
+  // Submit feedback for a prediction
+  Future<bool> submitPredictionFeedback({
+    required String imageId,
+    required bool isCorrect,
+    String? correctClass,
+    String? feedback,
+  }) async {
+    _setLoading(true);
+    try {
+      final success = await _apiService.submitPredictionFeedback(
+        imageId: imageId,
+        isCorrect: isCorrect,
+        correctClass: correctClass,
+        feedback: feedback,
+      );
+      return success;
+    } catch (e) {
+      _setError(e.toString());
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+  
+  // Helper method to determine current meal type
+  String _getCurrentMealType() {
+    final hour = DateTime.now().hour;
+    if (hour >= 4 && hour < 11) {
+      return 'Breakfast';
+    } else if (hour >= 11 && hour < 16) {
+      return 'Lunch';
+    } else if (hour >= 16 && hour < 20) {
+      return 'Snack';
+    } else {
+      return 'Dinner';
     }
   }
   

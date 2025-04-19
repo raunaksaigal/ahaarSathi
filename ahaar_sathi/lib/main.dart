@@ -10,6 +10,7 @@ import 'screens/food_logging_screen.dart';
 import 'screens/logs_screen.dart';
 import 'screens/goals_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/login_screen.dart';
 import 'widgets/bottom_nav_bar.dart';
 
 void main() {
@@ -249,22 +250,34 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         parent: _controller,
         curve: const Interval(0.3, 1.0, curve: Curves.easeInOut),
       ),
-    )..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        _controller.forward();
-      }
-    });
+    );
     
     _controller.forward();
     
-    // Navigate to MainScreen after splash delay
-    Timer(const Duration(seconds: 5), () {
+    // Check authentication status after animation
+    _checkAuthStatus();
+  }
+  
+  Future<void> _checkAuthStatus() async {
+    // Wait for animation to complete
+    await Future.delayed(const Duration(milliseconds: 3500));
+    
+    if (!mounted) return;
+    
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    await userProvider.checkAuthStatus();
+    
+    if (!mounted) return;
+    
+    if (userProvider.isLoggedIn) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const MainScreen()),
       );
-    });
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
   }
 
   @override

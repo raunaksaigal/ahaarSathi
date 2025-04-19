@@ -36,24 +36,22 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     
     try {
-      // API call for login would be here
-      // final userProvider = Provider.of<UserProvider>(context, listen: false);
-      // final apiService = Provider.of<ApiService>(context, listen: false);
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final success = await userProvider.login(
+        _emailController.text,
+        _passwordController.text,
+      );
       
-      // final user = await apiService.login(_emailController.text, _passwordController.text);
-      // userProvider.setUser(user);
-      
-      // For demo purposes without backend
-      await Future.delayed(const Duration(seconds: 2));
-      
-      // Navigate to main screen after successful login
-      if (mounted) {
+      if (success &&mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const MainScreen())
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+        );
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login failed. Please try again.')),
         );
       }
     } catch (e) {
-      // Show error message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login failed: ${e.toString()}')),
@@ -324,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Don\'t have an account?',
+                        "Don't have an account?",
                         style: TextStyle(
                           color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                         ),
@@ -332,7 +330,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => const SignupScreen())
+                            MaterialPageRoute(
+                              builder: (context) => const SignupScreen(),
+                            ),
                           );
                         },
                         style: TextButton.styleFrom(

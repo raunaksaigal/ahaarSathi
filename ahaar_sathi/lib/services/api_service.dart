@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import '../models/user.dart';
 import '../models/food_entry.dart';
 import '../models/water_entry.dart';
 
 class ApiService {
   // Base URL for the Django backend API
-  final String baseUrl = 'http://10.0.2.2:8000/api'; // Use this for Android emulator
+  final String baseUrl = 'http://192.168.29.84:8000'; // Use this for Android emulator
   // For physical device testing, use your computer's actual IP address
   // final String baseUrl = 'http://192.168.1.X:8000/api';
 
@@ -313,6 +314,71 @@ class ApiService {
       return;
     } catch (e) {
       throw Exception('Error during password reset: $e');
+    }
+  }
+
+  // Image Prediction API calls
+  Future<Map<String, dynamic>> predictImage(File imageFile) async {
+    try {
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$baseUrl/image/upload/'),
+      );
+      
+      // Add the image file
+      request.files.add(await http.MultipartFile.fromPath(
+        'image',
+        imageFile.path,
+        contentType: MediaType('image', 'jpeg'),
+      ));
+      
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      
+      if (response.statusCode == 201) {
+        final responseData = json.decode(response.body);
+        return {
+          'success': true,
+          'prediction': responseData['prediction_detail'],
+          'image_id': responseData['id'],
+        };
+      } else {
+        print('Error response: ${response.body}'); // Debug print
+        throw Exception('Failed to predict image: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Error in predictImage: $e'); // Debug print
+      throw Exception('Error predicting image: $e');
+    }
+  }
+
+  Future<bool> submitPredictionFeedback({
+    required String imageId,
+    required bool isCorrect,
+    String? correctClass,
+    String? feedback,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/image/feedback/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'image_id': imageId,
+          'is_correct': isCorrect,
+          'correct_class': correctClass,
+          'feedback': feedback,
+        }),
+      );
+      
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        throw Exception('Failed to submit feedback: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error submitting feedback: $e');
     }
   }
 } 

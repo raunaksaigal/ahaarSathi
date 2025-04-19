@@ -8,12 +8,13 @@ class UserProvider with ChangeNotifier {
   User? _user;
   bool _isLoading = false;
   String? _error;
+  bool _isAuthenticated = false;
   
   // Getters
   User? get user => _user;
   bool get isLoading => _isLoading;
   String? get error => _error;
-  bool get isLoggedIn => _user != null;
+  bool get isLoggedIn => _isAuthenticated;
   
   // Initialize user data with fake data
   Future<void> initUser() async {
@@ -144,6 +145,66 @@ class UserProvider with ChangeNotifier {
     }
   }
   
+  // Check if user is already logged in
+  Future<void> checkAuthStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('user_id');
+    final isGuest = prefs.getBool('is_guest') ?? false;
+    
+    if (userId != null) {
+      if (isGuest) {
+        await initGuestUser();
+      } else {
+        await fetchUserProfile(userId);
+      }
+      _isAuthenticated = true;
+    }
+  }
+  
+  // Login method
+  Future<bool> login(String email, String password) async {
+    _setLoading(true);
+    try {
+      // Simulate API call
+      await Future.delayed(const Duration(seconds: 2));
+      
+      // For demo purposes, accept any email/password
+      _user = User(
+        id: '1',
+        name: 'Arjun Singh',
+        age: 28,
+        height: 175.0,
+        weight: 70.0,
+        gender: 'Male',
+        dailyCalorieTarget: 2000,
+        dailyWaterTarget: 2500,
+      );
+      
+      // Save user ID to preferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_id', _user!.id);
+      await prefs.setBool('is_guest', false);
+      
+      _isAuthenticated = true;
+      _setLoading(false);
+      return true;
+    } catch (e) {
+      _setError(e.toString());
+      _setLoading(false);
+      return false;
+    }
+  }
+  
+  // Logout method
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_id');
+    await prefs.remove('is_guest');
+    _user = null;
+    _isAuthenticated = false;
+    notifyListeners();
+  }
+  
   // Helper methods
   void _setLoading(bool loading) {
     _isLoading = loading;
@@ -159,29 +220,5 @@ class UserProvider with ChangeNotifier {
   void clearError() {
     _error = null;
     notifyListeners();
-  }
-  
-  // Logout user
-  Future<void> logout() async {
-    _setLoading(true);
-    
-    try {
-      // Call the API service logout method if we had real authentication
-      if (_user != null) {
-        await _apiService.logout(_user!.id);
-      }
-      
-      // Clear stored user data
-      _user = null;
-      
-      // Remove user ID from shared preferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('user_id');
-      
-      _setLoading(false);
-    } catch (e) {
-      _setError(e.toString());
-      rethrow;
-    }
   }
 } 
