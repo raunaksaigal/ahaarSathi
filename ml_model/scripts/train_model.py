@@ -65,7 +65,7 @@ def validate_model(model, data_yaml):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Train YOLOv8 food classifier')
-    parser.add_argument('--data', type=str, default='D:/Stuff/hackathons/hack4bengal/food_classifier/data/food_dataset', help='Path to dataset directory')
+    parser.add_argument('--data', type=str, default=r"D:\projects\ahaarSathi\ml_model\scripts\data\food_dataset", help='Path to dataset directory')
     parser.add_argument('--model-size', type=str, default='s', choices=['n', 's', 'm', 'l', 'x'], 
                         help='YOLOv8 model size')
     parser.add_argument('--epochs', type=int, default=50, help='Number of epochs to train')
