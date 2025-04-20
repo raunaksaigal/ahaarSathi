@@ -19,8 +19,8 @@ class ImageUpload(models.Model):
 
 class PredictionFeedback(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prediction_feedbacks')
-    image = models.ForeignKey(ImageUpload, on_delete=models.CASCADE, related_name='feedbacks')
-    feedback_data = models.JSONField()
+    # image = models.ForeignKey(ImageUpload, on_delete=models.CASCADE, related_name='feedbacks')
+    feedback_data = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

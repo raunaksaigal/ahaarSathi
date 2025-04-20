@@ -10,7 +10,7 @@ class ImageUploadAdmin(admin.ModelAdmin):
 
 @admin.register(PredictionFeedback)
 class PredictionFeedbackAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'image', 'timestamp')
+    list_display = ('id', 'user', 'timestamp')
     list_filter = ('user',)
-    search_fields = ('id', 'user__username', 'image__id')
+    search_fields = ('id', 'user__username',)
     readonly_fields = ('timestamp',)

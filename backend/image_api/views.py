@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import ImageUpload, PredictionFeedback
 from .serializers import ImageUploadSerializer, PredictionFeedbackSerializer
-from .prediction import predict_image_content
+from .prediction import predict_image_content, get_nutrition_by_dish
 from .searchNutrients import get_row_as_json
 
 class ImageUploadView(generics.CreateAPIView):
@@ -43,9 +43,16 @@ class PredictionFeedbackView(generics.CreateAPIView):
     serializer_class = PredictionFeedbackSerializer
     permission_classes = [permissions.IsAuthenticated]
     
-    def perform_create(self, serializer):
+    # def perform_create(self, request):
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
         # Associate the feedback with the authenticated user
-        serializer.save(user=self.request.user)
+        instance = serializer.save(user=self.request.user)
+        response_data = get_nutrition_by_dish(instance.feedback_data)
+        return Response(response_data, status=status.HTTP_201_CREATED)
+
 
 class UserImageListView(generics.ListAPIView):
     """API endpoint to fetch all images uploaded by the current user"""

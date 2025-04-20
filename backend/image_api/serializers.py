@@ -18,5 +18,5 @@ class ImageUploadSerializer(serializers.ModelSerializer):
 class PredictionFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = PredictionFeedback
-        fields = ['id', 'image', 'feedback_data', 'timestamp']
+        fields = ['id', 'feedback_data', 'timestamp']
         read_only_fields = ['timestamp']
