@@ -3,7 +3,11 @@ import 'package:intl/intl.dart';
 class FoodEntry {
   final String id;
   final String name;
+<<<<<<< HEAD
   final double calories;
+=======
+  final int calories;
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
   final String imageUrl;
   final DateTime timestamp;
   final String mealType; // breakfast, lunch, dinner, snack
@@ -23,11 +27,19 @@ class FoodEntry {
     return FoodEntry(
       id: json['id'],
       name: json['name'],
+<<<<<<< HEAD
       calories: (json['calories'] as num?)?.toDouble() ?? 0.0,
       imageUrl: json['image_url'],
       timestamp: DateTime.parse(json['timestamp']),
       mealType: json['meal_type'],
       nutritionInfo: json['nutrition_info'] ?? {},
+=======
+      calories: json['calories'],
+      imageUrl: json['image_url'],
+      timestamp: DateTime.parse(json['timestamp']),
+      mealType: json['meal_type'],
+      nutritionInfo: json['nutrition_info'],
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
     );
   }
 
@@ -53,6 +65,7 @@ class FoodEntry {
     final timeFormat = DateFormat('HH:mm');
     return timeFormat.format(timestamp);
   }
+<<<<<<< HEAD
 
   // Helper methods to get nutrition values with units
   String get carbs => '${nutritionInfo['carbs']?.toStringAsFixed(1) ?? '0.0'}g';
@@ -65,4 +78,6 @@ class FoodEntry {
   String get iron => '${nutritionInfo['iron']?.toStringAsFixed(1) ?? '0.0'}mg';
   String get vitaminC => '${nutritionInfo['vitamin_c']?.toStringAsFixed(1) ?? '0.0'}mg';
   String get folate => '${nutritionInfo['folate']?.toStringAsFixed(1) ?? '0.0'}μg';
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 } 

@@ -165,10 +165,27 @@ class UserProvider with ChangeNotifier {
   Future<bool> login(String email, String password) async {
     _setLoading(true);
     try {
+<<<<<<< HEAD
       final apiService = ApiService();
       final user = await apiService.login(email, password);
       
       _user = user;
+=======
+      // Simulate API call
+      await Future.delayed(const Duration(seconds: 2));
+      
+      // For demo purposes, accept any email/password
+      _user = User(
+        id: '1',
+        name: 'Arjun Singh',
+        age: 28,
+        height: 175.0,
+        weight: 70.0,
+        gender: 'Male',
+        dailyCalorieTarget: 2000,
+        dailyWaterTarget: 2500,
+      );
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       
       // Save user ID to preferences
       final prefs = await SharedPreferences.getInstance();
@@ -195,6 +212,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
   
+<<<<<<< HEAD
   // Signup method
   Future<bool> signup(String name, String email, String password) async {
     _setLoading(true);
@@ -219,6 +237,8 @@ class UserProvider with ChangeNotifier {
     }
   }
   
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
   // Helper methods
   void _setLoading(bool loading) {
     _isLoading = loading;

@@ -190,6 +190,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.27"
+<<<<<<< HEAD
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -238,6 +239,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -344,6 +347,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.1"
+<<<<<<< HEAD
   js:
     dependency: transitive
     description:
@@ -352,6 +356,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
   leak_tracker:
     dependency: transitive
     description:
@@ -669,6 +675,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+<<<<<<< HEAD
   win32:
     dependency: transitive
     description:
@@ -677,6 +684,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.12.0"
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
   xdg_directories:
     dependency: transitive
     description:

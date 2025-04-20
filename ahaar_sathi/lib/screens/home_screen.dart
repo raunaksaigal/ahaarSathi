@@ -11,7 +11,10 @@ import 'food_logging_screen.dart';
 import 'water_logging_screen.dart';
 import 'water_logging_screen_dark.dart';
 import 'profile_screen.dart';
+<<<<<<< HEAD
 import '../widgets/meal_type_selector.dart';
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -602,6 +605,7 @@ class _HomeScreenState extends State<HomeScreen> {
   
   void _showFoodDetails(BuildContext context, FoodEntry foodEntry) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+<<<<<<< HEAD
     String selectedMealType = foodEntry.mealType;
     
     showDialog(
@@ -723,6 +727,81 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+=======
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          foodEntry.name,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600, 
+            fontSize: 20,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _infoRow(
+              "Calories", 
+              "${foodEntry.calories} kcal", 
+              Icons.local_fire_department_rounded,
+              Colors.orange,
+              isDarkMode
+            ),
+            const SizedBox(height: 12),
+            _infoRow(
+              "Meal Type", 
+              foodEntry.mealType, 
+              Icons.restaurant_rounded,
+              Colors.green,
+              isDarkMode
+            ),
+            const SizedBox(height: 12),
+            _infoRow(
+              "Time", 
+              foodEntry.formattedTime, 
+              Icons.access_time_rounded,
+              Colors.blue,
+              isDarkMode
+            ),
+            
+            const SizedBox(height: 16),
+            Text(
+              'Nutrition Info:',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: isDarkMode ? Colors.white : Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (foodEntry.nutritionInfo.containsKey('carbs'))
+              _nutrientRow('Carbs', '${foodEntry.nutritionInfo['carbs']}g', isDarkMode),
+            if (foodEntry.nutritionInfo.containsKey('protein'))
+              _nutrientRow('Protein', '${foodEntry.nutritionInfo['protein']}g', isDarkMode),
+            if (foodEntry.nutritionInfo.containsKey('fat'))
+              _nutrientRow('Fat', '${foodEntry.nutritionInfo['fat']}g', isDarkMode),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              'Close',
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+        ],
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       ),
     );
   }

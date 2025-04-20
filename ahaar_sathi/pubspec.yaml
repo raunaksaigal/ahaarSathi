@@ -41,7 +41,10 @@ dependencies:
   image_picker: ^1.0.4
   table_calendar: ^3.0.9
   google_fonts: ^6.2.1
+<<<<<<< HEAD
   flutter_secure_storage: ^9.0.0
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 
 dev_dependencies:
   flutter_test:
