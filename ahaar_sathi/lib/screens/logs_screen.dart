@@ -10,10 +10,7 @@ import '../models/food_entry.dart';
 import '../models/water_entry.dart';
 import 'water_logging_screen.dart';
 import 'water_logging_screen_dark.dart';
-<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
-=======
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 
 class LogsScreen extends StatefulWidget {
   const LogsScreen({Key? key}) : super(key: key);
@@ -337,7 +334,6 @@ class _LogsScreenState extends State<LogsScreen> with SingleTickerProviderStateM
   }
   
   void _showFoodDetails(BuildContext context, FoodEntry foodEntry) {
-<<<<<<< HEAD
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     
     showDialog(
@@ -405,36 +401,10 @@ class _LogsScreenState extends State<LogsScreen> with SingleTickerProviderStateM
               _nutrientRow('Folate', foodEntry.folate, isDarkMode),
             ],
           ),
-=======
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(foodEntry.name),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Calories: ${foodEntry.calories} kcal'),
-            SizedBox(height: 8),
-            Text('Meal Type: ${foodEntry.mealType}'),
-            SizedBox(height: 8),
-            Text('Time: ${foodEntry.formattedTime}'),
-            SizedBox(height: 16),
-            Text('Nutrition Info:'),
-            SizedBox(height: 4),
-            if (foodEntry.nutritionInfo.containsKey('carbs'))
-              Text('Carbs: ${foodEntry.nutritionInfo['carbs']}g'),
-            if (foodEntry.nutritionInfo.containsKey('protein'))
-              Text('Protein: ${foodEntry.nutritionInfo['protein']}g'),
-            if (foodEntry.nutritionInfo.containsKey('fat'))
-              Text('Fat: ${foodEntry.nutritionInfo['fat']}g'),
-          ],
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-<<<<<<< HEAD
             child: Text(
               'Close',
               style: GoogleFonts.inter(
@@ -442,15 +412,11 @@ class _LogsScreenState extends State<LogsScreen> with SingleTickerProviderStateM
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-=======
-            child: Text('Close'),
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
           ),
         ],
       ),
     );
   }
-<<<<<<< HEAD
   
   Widget _infoRow(String label, String value, IconData icon, Color color, bool isDarkMode) {
     return Row(
@@ -505,6 +471,4 @@ class _LogsScreenState extends State<LogsScreen> with SingleTickerProviderStateM
       ],
     );
   }
-=======
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 } 

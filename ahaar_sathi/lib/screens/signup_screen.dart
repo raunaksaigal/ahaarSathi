@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 import 'package:ahaar_sathi/main.dart';
-=======
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
@@ -45,7 +42,6 @@ class _SignupScreenState extends State<SignupScreen> {
     });
     
     try {
-<<<<<<< HEAD
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final success = await userProvider.signup(
         _nameController.text,
@@ -64,31 +60,6 @@ class _SignupScreenState extends State<SignupScreen> {
         );
       }
     } catch (e) {
-=======
-      // API call for signup would be here
-      // final userProvider = Provider.of<UserProvider>(context, listen: false);
-      // final apiService = Provider.of<ApiService>(context, listen: false);
-      
-      // final user = await apiService.signup(
-      //   _nameController.text, 
-      //   _emailController.text, 
-      //   _passwordController.text
-      // );
-      // userProvider.setUser(user);
-      
-      // For demo purposes without backend
-      await Future.delayed(const Duration(seconds: 2));
-      
-      // Navigate to home screen after successful signup
-      if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-          (route) => false,
-        );
-      }
-    } catch (e) {
-      // Show error message
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Signup failed: ${e.toString()}')),

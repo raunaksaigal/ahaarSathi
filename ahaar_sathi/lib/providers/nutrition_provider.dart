@@ -29,11 +29,7 @@ class NutritionProvider with ChangeNotifier {
     
     return _foodEntries
         .where((entry) => DateFormat('yyyy-MM-dd').format(entry.timestamp) == todayFormatted)
-<<<<<<< HEAD
         .fold(0, (sum, entry) => sum + entry.calories.round());
-=======
-        .fold(0, (sum, entry) => sum + entry.calories);
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
   }
   
   // Calculate total water consumed today (in milliliters)
@@ -200,7 +196,6 @@ class NutritionProvider with ChangeNotifier {
   }
   
   // Image prediction and food recognition
-<<<<<<< HEAD
   Future<Map<String, dynamic>> recognizeFood(String userId, File imageFile) async {
     try {
       _setLoading(true);
@@ -209,54 +204,10 @@ class NutritionProvider with ChangeNotifier {
       return result;
     } catch (e) {
       _setLoading(false);
-=======
-  Future<Map<String, dynamic>> recognizeFood(File imageFile) async {
-    _setLoading(true);
-    try {
-      final result = await _apiService.predictImage(imageFile);
-      
-      if (result['success']) {
-        // Create a food entry from the prediction
-        final prediction = result['prediction'];
-        final foodEntry = FoodEntry(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          name: prediction['class'] ?? 'Unknown Food',
-          calories: prediction['calories'] ?? 0,
-          timestamp: DateTime.now(),
-          mealType: _getCurrentMealType(),
-          imageUrl: '', // Temporary empty string, will be updated with actual URL when available
-          nutritionInfo: {
-            'carbs': prediction['carbs'] ?? 0,
-            'protein': prediction['protein'] ?? 0,
-            'fat': prediction['fat'] ?? 0,
-          },
-        );
-        
-        // Add to entries
-        _foodEntries.add(foodEntry);
-        notifyListeners();
-        
-        return {
-          'success': true,
-          'foodEntry': foodEntry,
-          'prediction': prediction,
-          'imageId': result['image_id'],
-        };
-      } else {
-        throw Exception('Failed to recognize food');
-      }
-    } catch (e) {
-      _setError(e.toString());
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       return {
         'success': false,
         'error': e.toString(),
       };
-<<<<<<< HEAD
-=======
-    } finally {
-      _setLoading(false);
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
     }
   }
   
@@ -377,7 +328,6 @@ class NutritionProvider with ChangeNotifier {
     _error = null;
     notifyListeners();
   }
-<<<<<<< HEAD
 
   // Update food entry
   void updateFoodEntry(FoodEntry updatedEntry) {
@@ -387,6 +337,4 @@ class NutritionProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-=======
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 } 

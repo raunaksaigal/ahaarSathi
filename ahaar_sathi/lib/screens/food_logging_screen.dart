@@ -6,11 +6,8 @@ import '../widgets/app_bar.dart';
 import '../providers/user_provider.dart';
 import '../providers/nutrition_provider.dart';
 import '../models/food_entry.dart';
-<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
 import '../services/api_service.dart';
-=======
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 
 class FoodLoggingScreen extends StatefulWidget {
   const FoodLoggingScreen({Key? key}) : super(key: key);
@@ -41,7 +38,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
     setState(() {
       _servingController.text = value.toString();
       if (_baseFoodData != null) {
-<<<<<<< HEAD
         final baseCalories = (_baseFoodData!['calories(kcal)'] as num?)?.toDouble() ?? 0.0;
         final baseProtein = (_baseFoodData!['protein'] as num?)?.toDouble() ?? 0.0;
         final baseCarbs = (_baseFoodData!['carbs'] as num?)?.toDouble() ?? 0.0;
@@ -53,12 +49,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
         final baseIron = (_baseFoodData!['iron'] as num?)?.toDouble() ?? 0.0;
         final baseVitamin = (_baseFoodData!['vitamin'] as num?)?.toDouble() ?? 0.0;
         final baseFolate = (_baseFoodData!['folate'] as num?)?.toDouble() ?? 0.0;
-=======
-        final baseCalories = (_baseFoodData!['calories'] as num?)?.toDouble() ?? 0.0;
-        final baseProtein = (_baseFoodData!['protein'] as num?)?.toDouble() ?? 0.0;
-        final baseCarbs = (_baseFoodData!['carbs'] as num?)?.toDouble() ?? 0.0;
-        final baseFat = (_baseFoodData!['fat'] as num?)?.toDouble() ?? 0.0;
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         
         _foodData = {
           ..._baseFoodData!,
@@ -66,7 +56,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
           'protein': (baseProtein * value).round(),
           'carbs': (baseCarbs * value).round(),
           'fat': (baseFat * value).round(),
-<<<<<<< HEAD
           'sugar': (baseSugar * value).round(),
           'fibre': (baseFibre * value).round(),
           'sodium': (baseSodium * value).round(),
@@ -74,8 +63,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
           'iron': (baseIron * value).round(),
           'vitamin': (baseVitamin * value).round(),
           'folate': (baseFolate * value).round(),
-=======
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         };
       }
     });
@@ -91,7 +78,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
     });
 
     try {
-<<<<<<< HEAD
       final apiService = ApiService();
       final result = await apiService.searchFood(_searchController.text);
       print("Result: $result");
@@ -129,33 +115,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
           'iron': (baseData['iron'] as num?)?.toDouble() ?? 0.0,
           'vitamin': (baseData['vitamin'] as num?)?.toDouble() ?? 0.0,
           'folate': (baseData['folate'] as num?)?.toDouble() ?? 0.0,
-=======
-      // TODO: Call API to search for food
-      // For now, using mock data
-      await Future.delayed(const Duration(seconds: 1));
-      final baseData = {
-        'name': _searchController.text,
-        'calories': 250.0,
-        'protein': 10.0,
-        'carbs': 30.0,
-        'fat': 8.0,
-        'serving_size': '100g',
-      };
-      setState(() {
-        _baseFoodData = baseData;
-        final servingSize = double.tryParse(_servingController.text) ?? 1.0;
-        final baseCalories = (baseData['calories'] as num?)?.toDouble() ?? 0.0;
-        final baseProtein = (baseData['protein'] as num?)?.toDouble() ?? 0.0;
-        final baseCarbs = (baseData['carbs'] as num?)?.toDouble() ?? 0.0;
-        final baseFat = (baseData['fat'] as num?)?.toDouble() ?? 0.0;
-        
-        _foodData = {
-          ...baseData,
-          'calories': (baseCalories * servingSize).round(),
-          'protein': (baseProtein * servingSize).round(),
-          'carbs': (baseCarbs * servingSize).round(),
-          'fat': (baseFat * servingSize).round(),
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         };
         _showSearchResults = true;
         _isLoading = false;
@@ -214,7 +173,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
 
     try {
       final nutritionProvider = Provider.of<NutritionProvider>(context, listen: false);
-<<<<<<< HEAD
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       
       if (userProvider.user == null) {
@@ -238,39 +196,19 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
           'iron': (prediction['iron(mg)'] as num?)?.toDouble() ?? 0.0,
           'vitamin': (prediction['vitamin(mg)'] as num?)?.toDouble() ?? 0.0,
           'folate': (prediction['folate(microg)'] as num?)?.toDouble() ?? 0.0,
-=======
-      final result = await nutritionProvider.recognizeFood(imageFile);
-
-      if (result['success']) {
-        final prediction = result['prediction'];
-        final baseData = {
-          'name': prediction['class'] ?? 'Unknown Food',
-          'calories': (prediction['confidence'] as num?)?.toDouble() ?? 0.0,
-          'protein': (prediction['protein'] as num?)?.toDouble() ?? 0.0,
-          'carbs': (prediction['carbs'] as num?)?.toDouble() ?? 0.0,
-          'fat': (prediction['fat'] as num?)?.toDouble() ?? 0.0,
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
           'serving_size': '100g',
         };
         setState(() {
           _baseFoodData = baseData;
           final servingSize = double.tryParse(_servingController.text) ?? 1.0;
-<<<<<<< HEAD
           final baseCalories = (baseData['calories(kcal)'] as num?)?.toDouble() ?? 0.0;
-=======
-          final baseCalories = (baseData['calories'] as num?)?.toDouble() ?? 0.0;
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
           final baseProtein = (baseData['protein'] as num?)?.toDouble() ?? 0.0;
           final baseCarbs = (baseData['carbs'] as num?)?.toDouble() ?? 0.0;
           final baseFat = (baseData['fat'] as num?)?.toDouble() ?? 0.0;
           
           _foodData = {
             ...baseData,
-<<<<<<< HEAD
             'calories': (baseData['calories(kcal)'] as num?)?.toDouble() ?? 0.0,
-=======
-            'calories': (baseCalories * servingSize).round(),
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
             'protein': (baseProtein * servingSize).round(),
             'carbs': (baseCarbs * servingSize).round(),
             'fat': (baseFat * servingSize).round(),
@@ -429,7 +367,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Column(
-<<<<<<< HEAD
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -451,40 +388,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
                               _nutrientRow('Iron', '${_foodData!['iron']}mg', Icons.bloodtype_rounded, Colors.redAccent),
                               _nutrientRow('Vitamin C', '${_foodData!['vitamin']}mg', Icons.medical_services_rounded, Colors.orangeAccent),
                               _nutrientRow('Folate', '${_foodData!['folate']}μg', Icons.eco_rounded, Colors.lightGreen),
-=======
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('Calories'),
-                                  Text('${_foodData!['calories']} kcal'),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('Protein'),
-                                  Text('${_foodData!['protein']}g'),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('Carbs'),
-                                  Text('${_foodData!['carbs']}g'),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('Fat'),
-                                  Text('${_foodData!['fat']}g'),
-                                ],
-                              ),
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
                             ],
                           ),
                         ),
@@ -549,7 +452,6 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
             ),
     );
   }
-<<<<<<< HEAD
 
   Widget _nutrientRow(String label, String value, IconData icon, Color color) {
     return Padding(
@@ -588,6 +490,4 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
       ),
     );
   }
-=======
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 } 
