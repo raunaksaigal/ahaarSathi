@@ -2,10 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-<<<<<<< HEAD
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-=======
->>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 import '../models/user.dart';
 import '../models/food_entry.dart';
 import '../models/water_entry.dart';
@@ -16,7 +13,6 @@ class ApiService {
   // For physical device testing, use your computer's actual IP address
   // final String baseUrl = 'http://192.168.1.X:8000/api';
 
-<<<<<<< HEAD
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   // Get stored access token

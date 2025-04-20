@@ -3,8 +3,8 @@
 [![Flutter](https://img.shields.io/badge/Flutter-3.7.0-blue.svg)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.7.0-blue.svg)](https://dart.dev)
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.68.0-green.svg)](https://fastapi.tiangolo.com)
-[![YOLOv8](https://img.shields.io/badge/YOLOv8-8.0.0-red.svg)](https://github.com/ultralytics/ultralytics)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.103.2-green.svg)](https://fastapi.tiangolo.com)
+[![YOLOv8](https://img.shields.io/badge/YOLOv8-8.2.85-red.svg)](https://github.com/ultralytics/ultralytics)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Ahaar Saathi is a comprehensive nutrition tracking application designed specifically for Indian cuisine. It helps users track their daily calorie intake, monitor nutritional values, and maintain a healthy diet.
@@ -106,16 +106,27 @@ ahaar_saathi/
 - flutter_secure_storage: ^9.0.0
 
 ### Backend
-- FastAPI
-- SQLAlchemy
-- Pydantic
-- Uvicorn
-- Python-jose
-- Passlib
-- Python-multipart
-- Pillow
-- TensorFlow
-- NumPy
+Key dependencies from requirements.txt:
+- FastAPI==0.103.2
+- Django==5.2
+- djangorestframework==3.16.0
+- djangorestframework_simplejwt==5.5.0
+- djoser==2.3.1
+- Pydantic==2.10.6
+- uvicorn==0.23.2
+- torch==2.4.0+cu121
+- torchvision==0.19.0+cu121
+- ultralytics==8.2.85 (YOLOv8)
+- opencv-python==4.11.0.86
+- numpy==1.26.4
+- pandas==2.2.3
+- scikit-learn==1.6.1
+- pillow==11.0.0
+- python-jose==2.9.0
+- passlib==1.7.4
+- python-multipart==0.0.9
+
+For a complete list of dependencies, please refer to the `requirements.txt` file in the project root.
 
 ## Contributing
 
