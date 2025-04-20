@@ -29,7 +29,11 @@ class NutritionProvider with ChangeNotifier {
     
     return _foodEntries
         .where((entry) => DateFormat('yyyy-MM-dd').format(entry.timestamp) == todayFormatted)
+<<<<<<< HEAD
+        .fold(0, (sum, entry) => sum + entry.calories.round());
+=======
         .fold(0, (sum, entry) => sum + entry.calories);
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
   }
   
   // Calculate total water consumed today (in milliliters)
@@ -196,6 +200,16 @@ class NutritionProvider with ChangeNotifier {
   }
   
   // Image prediction and food recognition
+<<<<<<< HEAD
+  Future<Map<String, dynamic>> recognizeFood(String userId, File imageFile) async {
+    try {
+      _setLoading(true);
+      final result = await _apiService.predictImage(imageFile);
+      _setLoading(false);
+      return result;
+    } catch (e) {
+      _setLoading(false);
+=======
   Future<Map<String, dynamic>> recognizeFood(File imageFile) async {
     _setLoading(true);
     try {
@@ -233,12 +247,16 @@ class NutritionProvider with ChangeNotifier {
       }
     } catch (e) {
       _setError(e.toString());
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       return {
         'success': false,
         'error': e.toString(),
       };
+<<<<<<< HEAD
+=======
     } finally {
       _setLoading(false);
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
     }
   }
   
@@ -359,4 +377,16 @@ class NutritionProvider with ChangeNotifier {
     _error = null;
     notifyListeners();
   }
+<<<<<<< HEAD
+
+  // Update food entry
+  void updateFoodEntry(FoodEntry updatedEntry) {
+    final index = _foodEntries.indexWhere((entry) => entry.id == updatedEntry.id);
+    if (index != -1) {
+      _foodEntries[index] = updatedEntry;
+      notifyListeners();
+    }
+  }
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 } 

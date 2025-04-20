@@ -165,6 +165,12 @@ class UserProvider with ChangeNotifier {
   Future<bool> login(String email, String password) async {
     _setLoading(true);
     try {
+<<<<<<< HEAD
+      final apiService = ApiService();
+      final user = await apiService.login(email, password);
+      
+      _user = user;
+=======
       // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
       
@@ -179,6 +185,7 @@ class UserProvider with ChangeNotifier {
         dailyCalorieTarget: 2000,
         dailyWaterTarget: 2500,
       );
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       
       // Save user ID to preferences
       final prefs = await SharedPreferences.getInstance();
@@ -205,6 +212,33 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
   
+<<<<<<< HEAD
+  // Signup method
+  Future<bool> signup(String name, String email, String password) async {
+    _setLoading(true);
+    try {
+      final apiService = ApiService();
+      final user = await apiService.signup(name, email, password);
+      
+      _user = user;
+      
+      // Save user ID to preferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_id', _user!.id);
+      await prefs.setBool('is_guest', false);
+      
+      _isAuthenticated = true;
+      _setLoading(false);
+      return true;
+    } catch (e) {
+      _setError(e.toString());
+      _setLoading(false);
+      return false;
+    }
+  }
+  
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
   // Helper methods
   void _setLoading(bool loading) {
     _isLoading = loading;

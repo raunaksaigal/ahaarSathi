@@ -6,6 +6,11 @@ import '../widgets/app_bar.dart';
 import '../providers/user_provider.dart';
 import '../providers/nutrition_provider.dart';
 import '../models/food_entry.dart';
+<<<<<<< HEAD
+import 'package:google_fonts/google_fonts.dart';
+import '../services/api_service.dart';
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 
 class FoodLoggingScreen extends StatefulWidget {
   const FoodLoggingScreen({Key? key}) : super(key: key);
@@ -36,10 +41,24 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
     setState(() {
       _servingController.text = value.toString();
       if (_baseFoodData != null) {
+<<<<<<< HEAD
+        final baseCalories = (_baseFoodData!['calories(kcal)'] as num?)?.toDouble() ?? 0.0;
+        final baseProtein = (_baseFoodData!['protein'] as num?)?.toDouble() ?? 0.0;
+        final baseCarbs = (_baseFoodData!['carbs'] as num?)?.toDouble() ?? 0.0;
+        final baseFat = (_baseFoodData!['fat'] as num?)?.toDouble() ?? 0.0;
+        final baseSugar = (_baseFoodData!['sugar'] as num?)?.toDouble() ?? 0.0;
+        final baseFibre = (_baseFoodData!['fibre'] as num?)?.toDouble() ?? 0.0;
+        final baseSodium = (_baseFoodData!['sodium'] as num?)?.toDouble() ?? 0.0;
+        final baseCalcium = (_baseFoodData!['calcium'] as num?)?.toDouble() ?? 0.0;
+        final baseIron = (_baseFoodData!['iron'] as num?)?.toDouble() ?? 0.0;
+        final baseVitamin = (_baseFoodData!['vitamin'] as num?)?.toDouble() ?? 0.0;
+        final baseFolate = (_baseFoodData!['folate'] as num?)?.toDouble() ?? 0.0;
+=======
         final baseCalories = (_baseFoodData!['calories'] as num?)?.toDouble() ?? 0.0;
         final baseProtein = (_baseFoodData!['protein'] as num?)?.toDouble() ?? 0.0;
         final baseCarbs = (_baseFoodData!['carbs'] as num?)?.toDouble() ?? 0.0;
         final baseFat = (_baseFoodData!['fat'] as num?)?.toDouble() ?? 0.0;
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         
         _foodData = {
           ..._baseFoodData!,
@@ -47,6 +66,16 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
           'protein': (baseProtein * value).round(),
           'carbs': (baseCarbs * value).round(),
           'fat': (baseFat * value).round(),
+<<<<<<< HEAD
+          'sugar': (baseSugar * value).round(),
+          'fibre': (baseFibre * value).round(),
+          'sodium': (baseSodium * value).round(),
+          'calcium': (baseCalcium * value).round(),
+          'iron': (baseIron * value).round(),
+          'vitamin': (baseVitamin * value).round(),
+          'folate': (baseFolate * value).round(),
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         };
       }
     });
@@ -62,6 +91,45 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
     });
 
     try {
+<<<<<<< HEAD
+      final apiService = ApiService();
+      final result = await apiService.searchFood(_searchController.text);
+      print("Result: $result");
+
+      final baseData = {
+        'name': result['dish_name'],
+        'calories(kcal)': (result['calories(kcal)'] as num?)?.toDouble() ?? 0.0,
+        'protein': (result['protein(g)'] as num?)?.toDouble() ?? 0.0,
+        'carbs': (result['carbohydrates(g)'] as num?)?.toDouble() ?? 0.0,
+        'fat': (result['fats(g)'] as num?)?.toDouble() ?? 0.0,
+        'sugar': (result['sugar(g)'] as num?)?.toDouble() ?? 0.0,
+        'fibre': (result['fibre(g)'] as num?)?.toDouble() ?? 0.0,
+        'sodium': (result['sodium(mg)'] as num?)?.toDouble() ?? 0.0,
+        'calcium': (result['calcium(mg)'] as num?)?.toDouble() ?? 0.0,
+        'iron': (result['iron(mg)'] as num?)?.toDouble() ?? 0.0,
+        'vitamin': (result['vitamin_c(mg)'] as num?)?.toDouble() ?? 0.0,
+        'folate': (result['folate(microg)'] as num?)?.toDouble() ?? 0.0,
+        'serving_size': '100g',
+      };
+
+      setState(() {
+        _baseFoodData = baseData;
+        final servingSize = double.tryParse(_servingController.text) ?? 1.0;
+        
+        _foodData = {
+          ...baseData,
+          'calories': (baseData['calories(kcal)'] as num?)?.toDouble() ?? 0.0,
+          'protein': (baseData['protein'] as num?)?.toDouble() ?? 0.0,
+          'carbs': (baseData['carbs'] as num?)?.toDouble() ?? 0.0,
+          'fat': (baseData['fat'] as num?)?.toDouble() ?? 0.0,
+          'sugar': (baseData['sugar'] as num?)?.toDouble() ?? 0.0,
+          'fibre': (baseData['fibre'] as num?)?.toDouble() ?? 0.0,
+          'sodium': (baseData['sodium'] as num?)?.toDouble() ?? 0.0,
+          'calcium': (baseData['calcium'] as num?)?.toDouble() ?? 0.0,
+          'iron': (baseData['iron'] as num?)?.toDouble() ?? 0.0,
+          'vitamin': (baseData['vitamin'] as num?)?.toDouble() ?? 0.0,
+          'folate': (baseData['folate'] as num?)?.toDouble() ?? 0.0,
+=======
       // TODO: Call API to search for food
       // For now, using mock data
       await Future.delayed(const Duration(seconds: 1));
@@ -87,6 +155,7 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
           'protein': (baseProtein * servingSize).round(),
           'carbs': (baseCarbs * servingSize).round(),
           'fat': (baseFat * servingSize).round(),
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         };
         _showSearchResults = true;
         _isLoading = false;
@@ -145,6 +214,31 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
 
     try {
       final nutritionProvider = Provider.of<NutritionProvider>(context, listen: false);
+<<<<<<< HEAD
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      
+      if (userProvider.user == null) {
+        throw Exception('User not logged in');
+      }
+
+      final result = await nutritionProvider.recognizeFood(userProvider.user!.id, imageFile);
+
+      if (result['success']) {
+        final prediction = result['prediction_detail']['nutrition'];
+        final baseData = {
+          'name': prediction['dish_name'] ?? 'Unknown Food',
+          'calories(kcal)': (prediction['calories(kcal)'] as num?)?.toDouble() ?? 0.0,
+          'protein': (prediction['protein(g)'] as num?)?.toDouble() ?? 0.0,
+          'carbs': (prediction['carbohydrates(g)'] as num?)?.toDouble() ?? 0.0,
+          'fat': (prediction['fats(g)'] as num?)?.toDouble() ?? 0.0,
+          'sugar': (prediction['sugar(g)'] as num?)?.toDouble() ?? 0.0,
+          'fibre': (prediction['fibre(g)'] as num?)?.toDouble() ?? 0.0,
+          'sodium': (prediction['sodium(mg)'] as num?)?.toDouble() ?? 0.0,
+          'calcium': (prediction['calcium(mg)'] as num?)?.toDouble() ?? 0.0,
+          'iron': (prediction['iron(mg)'] as num?)?.toDouble() ?? 0.0,
+          'vitamin': (prediction['vitamin(mg)'] as num?)?.toDouble() ?? 0.0,
+          'folate': (prediction['folate(microg)'] as num?)?.toDouble() ?? 0.0,
+=======
       final result = await nutritionProvider.recognizeFood(imageFile);
 
       if (result['success']) {
@@ -155,19 +249,28 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
           'protein': (prediction['protein'] as num?)?.toDouble() ?? 0.0,
           'carbs': (prediction['carbs'] as num?)?.toDouble() ?? 0.0,
           'fat': (prediction['fat'] as num?)?.toDouble() ?? 0.0,
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
           'serving_size': '100g',
         };
         setState(() {
           _baseFoodData = baseData;
           final servingSize = double.tryParse(_servingController.text) ?? 1.0;
+<<<<<<< HEAD
+          final baseCalories = (baseData['calories(kcal)'] as num?)?.toDouble() ?? 0.0;
+=======
           final baseCalories = (baseData['calories'] as num?)?.toDouble() ?? 0.0;
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
           final baseProtein = (baseData['protein'] as num?)?.toDouble() ?? 0.0;
           final baseCarbs = (baseData['carbs'] as num?)?.toDouble() ?? 0.0;
           final baseFat = (baseData['fat'] as num?)?.toDouble() ?? 0.0;
           
           _foodData = {
             ...baseData,
+<<<<<<< HEAD
+            'calories': (baseData['calories(kcal)'] as num?)?.toDouble() ?? 0.0,
+=======
             'calories': (baseCalories * servingSize).round(),
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
             'protein': (baseProtein * servingSize).round(),
             'carbs': (baseCarbs * servingSize).round(),
             'fat': (baseFat * servingSize).round(),
@@ -326,6 +429,29 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Column(
+<<<<<<< HEAD
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Nutrition Info:',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              _nutrientRow('Calories', '${_foodData!['calories']} kcal', Icons.local_fire_department_rounded, Colors.orange),
+                              _nutrientRow('Protein', '${_foodData!['protein']}g', Icons.fitness_center_rounded, Colors.blue),
+                              _nutrientRow('Carbs', '${_foodData!['carbs']}g', Icons.grain_rounded, Colors.green),
+                              _nutrientRow('Fat', '${_foodData!['fat']}g', Icons.water_drop_rounded, Colors.red),
+                              _nutrientRow('Sugar', '${_foodData!['sugar']}g', Icons.cake_rounded, Colors.pink),
+                              _nutrientRow('Fibre', '${_foodData!['fibre']}g', Icons.grass_rounded, Colors.brown),
+                              _nutrientRow('Sodium', '${_foodData!['sodium']}mg', Icons.science_rounded, Colors.blueGrey),
+                              _nutrientRow('Calcium', '${_foodData!['calcium']}mg', Icons.egg_rounded, Colors.cyan),
+                              _nutrientRow('Iron', '${_foodData!['iron']}mg', Icons.bloodtype_rounded, Colors.redAccent),
+                              _nutrientRow('Vitamin C', '${_foodData!['vitamin']}mg', Icons.medical_services_rounded, Colors.orangeAccent),
+                              _nutrientRow('Folate', '${_foodData!['folate']}μg', Icons.eco_rounded, Colors.lightGreen),
+=======
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -358,6 +484,7 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
                                   Text('${_foodData!['fat']}g'),
                                 ],
                               ),
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
                             ],
                           ),
                         ),
@@ -422,4 +549,45 @@ class _FoodLoggingScreenState extends State<FoodLoggingScreen> {
             ),
     );
   }
+<<<<<<< HEAD
+
+  Widget _nutrientRow(String label, String value, IconData icon, Color color) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              size: 18,
+              color: color,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const Spacer(),
+          Text(
+            value,
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 } 

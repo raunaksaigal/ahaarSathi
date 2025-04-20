@@ -2,6 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+<<<<<<< HEAD
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 import '../models/user.dart';
 import '../models/food_entry.dart';
 import '../models/water_entry.dart';
@@ -12,10 +16,80 @@ class ApiService {
   // For physical device testing, use your computer's actual IP address
   // final String baseUrl = 'http://192.168.1.X:8000/api';
 
+<<<<<<< HEAD
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+
+  // Get stored access token
+  Future<String?> getAccessToken() async {
+    return await _secureStorage.read(key: 'access_token');
+  }
+
+  // Get stored refresh token
+  Future<String?> getRefreshToken() async {
+    return await _secureStorage.read(key: 'refresh_token');
+  }
+
+  // Store tokens
+  Future<void> storeTokens(String accessToken, String refreshToken) async {
+    await _secureStorage.write(key: 'access_token', value: accessToken);
+    await _secureStorage.write(key: 'refresh_token', value: refreshToken);
+  }
+
+  // Clear stored tokens
+  Future<void> clearTokens() async {
+    await _secureStorage.delete(key: 'access_token');
+    await _secureStorage.delete(key: 'refresh_token');
+  }
+
+  // Refresh access token
+  Future<bool> refreshAccessToken() async {
+    try {
+      final refreshToken = await getRefreshToken();
+      if (refreshToken == null) return false;
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/jwt/refresh/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'refresh': refreshToken,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final tokenData = json.decode(response.body);
+        await storeTokens(tokenData['access'], refreshToken);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Add authorization header to requests
+  Future<Map<String, String>> getAuthHeaders() async {
+    final accessToken = await getAccessToken();
+    return {
+      'Content-Type': 'application/json',
+      if (accessToken != null) 'Authorization': 'Bearer $accessToken',
+    };
+  }
+
+  // User API calls
+  Future<User> getUserProfile(String userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/users/$userId/'),
+        headers: await getAuthHeaders(),
+      );
+=======
   // User API calls
   Future<User> getUserProfile(String userId) async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/users/$userId/'));
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       if (response.statusCode == 200) {
         return User.fromJson(json.decode(response.body));
       } else {
@@ -30,9 +104,13 @@ class ApiService {
     try {
       final response = await http.put(
         Uri.parse('$baseUrl/users/${user.id}/'),
+<<<<<<< HEAD
+        headers: await getAuthHeaders(),
+=======
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         body: jsonEncode(user.toJson()),
       );
       if (response.statusCode == 200) {
@@ -53,7 +131,14 @@ class ApiService {
         url += '?date=$date';
       }
       
+<<<<<<< HEAD
+      final response = await http.get(
+        Uri.parse(url),
+        headers: await getAuthHeaders(),
+      );
+=======
       final response = await http.get(Uri.parse(url));
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       if (response.statusCode == 200) {
         List<dynamic> jsonList = json.decode(response.body);
         return jsonList.map((json) => FoodEntry.fromJson(json)).toList();
@@ -69,9 +154,13 @@ class ApiService {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/users/$userId/food/'),
+<<<<<<< HEAD
+        headers: await getAuthHeaders(),
+=======
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         body: jsonEncode(foodEntry.toJson()),
       );
       if (response.statusCode == 201) {
@@ -91,6 +180,13 @@ class ApiService {
         Uri.parse('$baseUrl/users/$userId/food/image-upload/'),
       );
       
+<<<<<<< HEAD
+      // Add auth header
+      final headers = await getAuthHeaders();
+      request.headers.addAll(headers);
+      
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       request.files.add(await http.MultipartFile.fromPath(
         'image',
         imageFile.path,
@@ -118,7 +214,14 @@ class ApiService {
         url += '?date=$date';
       }
       
+<<<<<<< HEAD
+      final response = await http.get(
+        Uri.parse(url),
+        headers: await getAuthHeaders(),
+      );
+=======
       final response = await http.get(Uri.parse(url));
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       if (response.statusCode == 200) {
         List<dynamic> jsonList = json.decode(response.body);
         return jsonList.map((json) => WaterEntry.fromJson(json)).toList();
@@ -134,9 +237,13 @@ class ApiService {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/users/$userId/water/'),
+<<<<<<< HEAD
+        headers: await getAuthHeaders(),
+=======
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         body: jsonEncode(waterEntry.toJson()),
       );
       if (response.statusCode == 201) {
@@ -157,6 +264,13 @@ class ApiService {
         Uri.parse('$baseUrl/food-recognition/'),
       );
       
+<<<<<<< HEAD
+      // Add auth header
+      final headers = await getAuthHeaders();
+      request.headers.addAll(headers);
+      
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       request.files.add(await http.MultipartFile.fromPath(
         'image',
         imageFile.path,
@@ -180,7 +294,14 @@ class ApiService {
   // Get summary data for dashboard
   Future<Map<String, dynamic>> getDashboardData(String userId) async {
     try {
+<<<<<<< HEAD
+      final response = await http.get(
+        Uri.parse('$baseUrl/users/$userId/dashboard/'),
+        headers: await getAuthHeaders(),
+      );
+=======
       final response = await http.get(Uri.parse('$baseUrl/users/$userId/dashboard/'));
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
@@ -194,6 +315,59 @@ class ApiService {
   // Authentication API calls
   Future<User> login(String email, String password) async {
     try {
+<<<<<<< HEAD
+      print('Attempting login for: $email');
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/jwt/create/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'username': email,
+          'password': password,
+        }),
+      );
+      
+      print('Login response status: ${response.statusCode}');
+      print('Login response body: ${response.body}');
+      
+      if (response.statusCode == 200) {
+        final tokenData = json.decode(response.body);
+        await storeTokens(tokenData['access'], tokenData['refresh']);
+        print('Tokens stored successfully');
+        
+        // Get user profile
+        final profileResponse = await http.get(
+          Uri.parse('$baseUrl/auth/users/me/'),
+          headers: await getAuthHeaders(),
+        );
+        
+        print('Profile response status: ${profileResponse.statusCode}');
+        print('Profile response body: ${profileResponse.body}');
+        
+        if (profileResponse.statusCode == 200) {
+          final userData = json.decode(profileResponse.body);
+          print('Creating User object with data: $userData');
+          return User(
+            id: userData['id'].toString(),
+            name: userData['username'] ?? 'User',
+            // Dummy values for other fields
+            age: 30,
+            height: 170,
+            weight: 65,
+            gender: 'Male',
+            dailyCalorieTarget: 2000,
+            dailyWaterTarget: 2500,
+          );
+        } else {
+          throw Exception('Failed to get user profile: ${profileResponse.statusCode}');
+        }
+      } else {
+        throw Exception('Failed to login: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error during login: $e');
+=======
       // TODO: Implement actual API call
       // final response = await http.post(
       //   Uri.parse('$baseUrl/auth/login'),
@@ -225,12 +399,51 @@ class ApiService {
         dailyWaterTarget: 2500,
       );
     } catch (e) {
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       throw Exception('Error during login: $e');
     }
   }
 
   Future<User> signup(String name, String email, String password) async {
     try {
+<<<<<<< HEAD
+      print('Attempting signup for: $email');
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/users/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'username': email,
+          'email': email,
+          'password': password,
+          're_password': password,
+        }),
+      );
+      
+      print('Signup response status: ${response.statusCode}');
+      print('Signup response body: ${response.body}');
+      
+      if (response.statusCode == 201) {
+        final userData = json.decode(response.body);
+        print('Creating User object with data: $userData');
+        return User(
+          id: userData['id'].toString(),
+          name: name,
+          // Dummy values for other fields
+          age: 30,
+          height: 170,
+          weight: 65,
+          gender: 'Male',
+          dailyCalorieTarget: 2000,
+          dailyWaterTarget: 2500,
+        );
+      } else {
+        throw Exception('Failed to create account: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error during signup: $e');
+=======
       // TODO: Implement actual API call
       // final response = await http.post(
       //   Uri.parse('$baseUrl/auth/signup'),
@@ -263,12 +476,16 @@ class ApiService {
         dailyWaterTarget: 2500,
       );
     } catch (e) {
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       throw Exception('Error during signup: $e');
     }
   }
 
   Future<void> logout(String userId) async {
     try {
+<<<<<<< HEAD
+      await clearTokens();
+=======
       // TODO: Implement actual API call
       // final response = await http.post(
       //   Uri.parse('$baseUrl/auth/logout'),
@@ -286,6 +503,7 @@ class ApiService {
       
       // Mock response for demo
       await Future.delayed(const Duration(milliseconds: 500));
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       return;
     } catch (e) {
       throw Exception('Error during logout: $e');
@@ -325,6 +543,13 @@ class ApiService {
         Uri.parse('$baseUrl/image/upload/'),
       );
       
+<<<<<<< HEAD
+      // Add auth header
+      final headers = await getAuthHeaders();
+      request.headers.addAll(headers);
+      
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       // Add the image file
       request.files.add(await http.MultipartFile.fromPath(
         'image',
@@ -337,9 +562,25 @@ class ApiService {
       
       if (response.statusCode == 201) {
         final responseData = json.decode(response.body);
+<<<<<<< HEAD
+        print('API Response: $responseData'); // Debug print
+        
+        // Extract the prediction details
+        final predictionDetail = {
+          'class': responseData['prediction'],
+          'confidence': responseData['prediction_detail']['confidence'],
+          'nutrition': responseData['prediction_detail']['nutrition'],
+        };
+        
+        return {
+          'success': true,
+          'prediction_detail': predictionDetail,
+          'image_url': responseData['image_url'],
+=======
         return {
           'success': true,
           'prediction': responseData['prediction_detail'],
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
           'image_id': responseData['id'],
         };
       } else {
@@ -381,4 +622,52 @@ class ApiService {
       throw Exception('Error submitting feedback: $e');
     }
   }
+<<<<<<< HEAD
+
+  // Send search feedback
+  Future<bool> submitSearchFeedback(String feedbackData) async {
+    try {
+      final headers = await getAuthHeaders();
+      final response = await http.post(
+        Uri.parse('$baseUrl/image/feedback/'),
+        headers: headers,
+        body: jsonEncode({
+          'feedback_data': feedbackData,
+        }),
+      );
+      
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        throw Exception('Failed to submit search feedback: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error submitting search feedback: $e');
+    }
+  }
+
+  // Search for food and get nutrition data
+  Future<Map<String, dynamic>> searchFood(String dishName) async {
+    try {
+      final headers = await getAuthHeaders();
+      final response = await http.post(
+        Uri.parse('$baseUrl/image/feedback/'),
+        headers: headers,
+        body: jsonEncode({
+          'feedback_data': dishName,
+        }),
+      );
+      
+      if (response.statusCode == 201) {
+        print('\n\n\n\n\n\n\n\n\nSearch response: ${json.decode(response.body)}');
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to search food: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error searching food: $e');
+    }
+  }
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 } 

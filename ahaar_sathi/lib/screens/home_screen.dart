@@ -11,6 +11,10 @@ import 'food_logging_screen.dart';
 import 'water_logging_screen.dart';
 import 'water_logging_screen_dark.dart';
 import 'profile_screen.dart';
+<<<<<<< HEAD
+import '../widgets/meal_type_selector.dart';
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -601,6 +605,129 @@ class _HomeScreenState extends State<HomeScreen> {
   
   void _showFoodDetails(BuildContext context, FoodEntry foodEntry) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+<<<<<<< HEAD
+    String selectedMealType = foodEntry.mealType;
+    
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            foodEntry.name,
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w600, 
+              fontSize: 20,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _infoRow(
+                  "Calories", 
+                  "${foodEntry.calories} kcal", 
+                  Icons.local_fire_department_rounded,
+                  Colors.orange,
+                  isDarkMode
+                ),
+                const SizedBox(height: 12),
+                if (selectedMealType == 'Select Meal Type')
+                  MealTypeSelector(
+                    currentMealType: selectedMealType,
+                    onMealTypeSelected: (newMealType) {
+                      setState(() {
+                        selectedMealType = newMealType;
+                      });
+                    },
+                    isDarkMode: isDarkMode,
+                  )
+                else
+                  _infoRow(
+                    "Meal Type", 
+                    selectedMealType, 
+                    Icons.restaurant_rounded,
+                    Colors.green,
+                    isDarkMode
+                  ),
+                const SizedBox(height: 12),
+                _infoRow(
+                  "Time", 
+                  foodEntry.formattedTime, 
+                  Icons.access_time_rounded,
+                  Colors.blue,
+                  isDarkMode
+                ),
+                
+                const SizedBox(height: 16),
+                Text(
+                  'Nutrition Info:',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: isDarkMode ? Colors.white : Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _nutrientRow('Carbs', foodEntry.carbs, isDarkMode),
+                _nutrientRow('Protein', foodEntry.protein, isDarkMode),
+                _nutrientRow('Fat', foodEntry.fat, isDarkMode),
+                _nutrientRow('Sugar', foodEntry.sugar, isDarkMode),
+                _nutrientRow('Fibre', foodEntry.fibre, isDarkMode),
+                _nutrientRow('Sodium', foodEntry.sodium, isDarkMode),
+                _nutrientRow('Calcium', foodEntry.calcium, isDarkMode),
+                _nutrientRow('Iron', foodEntry.iron, isDarkMode),
+                _nutrientRow('Vitamin C', foodEntry.vitaminC, isDarkMode),
+                _nutrientRow('Folate', foodEntry.folate, isDarkMode),
+              ],
+            ),
+          ),
+          actions: [
+            if (selectedMealType == 'Select Meal Type')
+              TextButton(
+                onPressed: () {
+                  if (selectedMealType != 'Select Meal Type') {
+                    final nutritionProvider = Provider.of<NutritionProvider>(context, listen: false);
+                    final updatedFoodEntry = FoodEntry(
+                      id: foodEntry.id,
+                      name: foodEntry.name,
+                      calories: foodEntry.calories,
+                      imageUrl: foodEntry.imageUrl,
+                      timestamp: foodEntry.timestamp,
+                      mealType: selectedMealType,
+                      nutritionInfo: foodEntry.nutritionInfo,
+                    );
+                    nutritionProvider.updateFoodEntry(updatedFoodEntry);
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: Text(
+                  'Save',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w500,
+                    color: selectedMealType != 'Select Meal Type'
+                        ? Theme.of(context).colorScheme.primary
+                        : Colors.grey,
+                  ),
+                ),
+              ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Close',
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+          ],
+        ),
+=======
     
     showDialog(
       context: context,
@@ -674,6 +801,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
       ),
     );
   }

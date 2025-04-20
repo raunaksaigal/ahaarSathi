@@ -18,6 +18,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _obscurePassword = true;
+<<<<<<< HEAD
+  final RegExp _emailRegex = RegExp(
+    r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+',
+  );
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
   
   @override
   void dispose() {
@@ -38,17 +44,29 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final success = await userProvider.login(
+<<<<<<< HEAD
+        _emailController.text.trim(),
+        _passwordController.text,
+      );
+      
+      if (success && mounted) {
+=======
         _emailController.text,
         _passwordController.text,
       );
       
       if (success &&mounted) {
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const MainScreen()),
         );
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
+<<<<<<< HEAD
+          const SnackBar(content: Text('Login failed. Please check your credentials.')),
+=======
           const SnackBar(content: Text('Login failed. Please try again.')),
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         );
       }
     } catch (e) {
@@ -121,6 +139,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   
                   SizedBox(height: isSmallScreen ? 40 : 60),
                   
+<<<<<<< HEAD
+                  // Username field
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(color: textColor),
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                      hintText: 'Enter your username',
+                      prefixIcon: Icon(Icons.person_outline, color: isDarkMode ? Colors.grey[400] : Colors.grey[600]),
+=======
                   // Email field
                   TextFormField(
                     controller: _emailController,
@@ -130,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       labelText: 'Email',
                       hintText: 'example@email.com',
                       prefixIcon: Icon(Icons.email_outlined, color: isDarkMode ? Colors.grey[400] : Colors.grey[600]),
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -139,10 +169,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
+<<<<<<< HEAD
+                        return 'Please enter your username';
+=======
                         return 'Please enter your email';
                       }
                       if (!value.contains('@') || !value.contains('.')) {
                         return 'Please enter a valid email';
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
                       }
                       return null;
                     },

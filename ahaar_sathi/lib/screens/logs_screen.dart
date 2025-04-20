@@ -10,6 +10,10 @@ import '../models/food_entry.dart';
 import '../models/water_entry.dart';
 import 'water_logging_screen.dart';
 import 'water_logging_screen_dark.dart';
+<<<<<<< HEAD
+import 'package:google_fonts/google_fonts.dart';
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 
 class LogsScreen extends StatefulWidget {
   const LogsScreen({Key? key}) : super(key: key);
@@ -333,6 +337,75 @@ class _LogsScreenState extends State<LogsScreen> with SingleTickerProviderStateM
   }
   
   void _showFoodDetails(BuildContext context, FoodEntry foodEntry) {
+<<<<<<< HEAD
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          foodEntry.name,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600, 
+            fontSize: 20,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _infoRow(
+                "Calories", 
+                "${foodEntry.calories} kcal", 
+                Icons.local_fire_department_rounded,
+                Colors.orange,
+                isDarkMode
+              ),
+              const SizedBox(height: 12),
+              _infoRow(
+                "Meal Type", 
+                foodEntry.mealType, 
+                Icons.restaurant_rounded,
+                Colors.green,
+                isDarkMode
+              ),
+              const SizedBox(height: 12),
+              _infoRow(
+                "Time", 
+                foodEntry.formattedTime, 
+                Icons.access_time_rounded,
+                Colors.blue,
+                isDarkMode
+              ),
+              
+              const SizedBox(height: 16),
+              Text(
+                'Nutrition Info:',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: isDarkMode ? Colors.white : Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 8),
+              _nutrientRow('Carbs', foodEntry.carbs, isDarkMode),
+              _nutrientRow('Protein', foodEntry.protein, isDarkMode),
+              _nutrientRow('Fat', foodEntry.fat, isDarkMode),
+              _nutrientRow('Sugar', foodEntry.sugar, isDarkMode),
+              _nutrientRow('Fibre', foodEntry.fibre, isDarkMode),
+              _nutrientRow('Sodium', foodEntry.sodium, isDarkMode),
+              _nutrientRow('Calcium', foodEntry.calcium, isDarkMode),
+              _nutrientRow('Iron', foodEntry.iron, isDarkMode),
+              _nutrientRow('Vitamin C', foodEntry.vitaminC, isDarkMode),
+              _nutrientRow('Folate', foodEntry.folate, isDarkMode),
+            ],
+          ),
+=======
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -356,14 +429,82 @@ class _LogsScreenState extends State<LogsScreen> with SingleTickerProviderStateM
             if (foodEntry.nutritionInfo.containsKey('fat'))
               Text('Fat: ${foodEntry.nutritionInfo['fat']}g'),
           ],
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
+<<<<<<< HEAD
+            child: Text(
+              'Close',
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+=======
             child: Text('Close'),
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
           ),
         ],
       ),
     );
   }
+<<<<<<< HEAD
+  
+  Widget _infoRow(String label, String value, IconData icon, Color color, bool isDarkMode) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 20,
+          color: color,
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            color: isDarkMode ? Colors.white : Colors.black87,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          value,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            color: isDarkMode ? Colors.white : Colors.black87,
+          ),
+        ),
+      ],
+    );
+  }
+  
+  Widget _nutrientRow(String label, String value, bool isDarkMode) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            color: isDarkMode ? Colors.white : Colors.black87,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          value,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            color: isDarkMode ? Colors.white : Colors.black87,
+          ),
+        ),
+      ],
+    );
+  }
+=======
+>>>>>>> d597129a216602c46030b9bd855f77bc9f5f8a4c
 } 
