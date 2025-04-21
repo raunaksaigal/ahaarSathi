@@ -77,7 +77,7 @@ ahaar_saathi/
 
 4. Start the backend server:
    ```bash
-   uvicorn main:app --reload
+   py manage.py runserver 0.0.0.0:8000
    ```
 
 ## Key Features
